@@ -70,8 +70,14 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
  */
   async uploadFile(file: Express.Multer.File) {
 
+    console.log('file -->',file)
+  
+    if(file === undefined){
+      console.log('retuern')
+      return null
+    }
+    
     const name = fileNameUUID(file)
-
     const uploadResult = await this.s3.upload({
       Bucket: process.env.MINIO_BUCKET, // Nombre de tu bucket
       Body: file.buffer,
