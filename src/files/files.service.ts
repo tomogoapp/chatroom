@@ -73,7 +73,6 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
     console.log('file -->',file)
   
     if(file === undefined){
-      console.log('retuern')
       return null
     }
     

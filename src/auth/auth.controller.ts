@@ -41,8 +41,7 @@ export class AuthController {
   ) {
 
     const uploadAvatar = await this.fileService.uploadFile(file)
-    createUserDTO.avatar = uploadAvatar.Location
-
+    createUserDTO.avatar = uploadAvatar === null ? null : uploadAvatar.Location
     return await this.authService.create(createUserDTO);
   }
 
