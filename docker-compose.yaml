@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:14.3
+    restart: always
+    ports:
+      - ${DB_PORTS}
+    environment:
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    container_name: ${DB_CONTAINER_NAME}
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    networks:
+      - ${NETWORK}
+
+  minio:
+    image: minio/minio
+    container_name: ${MINIO_CONTAINER_NAME}
+    ports:
+      - ${MINIO_PORTS_DB}
+      - ${MINIO_PORTS_INTERFACE}
+    volumes:
+      - "/mnt/data:/data"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY}
+    command: server /data/${MINIO_BUCKET} --console-address ":9001"
+    restart: unless-stopped
+    networks:
+      - ${NETWORK}
+      
+networks:
+  windows96:
+    external: true
