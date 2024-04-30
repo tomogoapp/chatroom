@@ -64,9 +64,9 @@ single file. Here's a breakdown of what the code is doing: */
       try {
           const uploadResult = await this.filesService.uploadFile(file)
           return {
-              message: 'File uploaded successfully',
-              data: uploadResult
-          };
+            message: 'File uploaded successfully',
+            data: uploadResult
+        };
       } catch (error) {
           throw new BadRequestException('Failedddd to upload file');
       }

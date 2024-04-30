@@ -38,6 +38,12 @@ export class User {
     })
     roles: string[]
 
+
+    @Column('text',{
+        nullable: true
+    })
+    avatar: string
+
     // @OneToMany(
     //     () => Product,
     //     ( product ) => product.user
