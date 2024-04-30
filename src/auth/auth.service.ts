@@ -58,7 +58,7 @@ export class AuthService {
         token:this.getJwtToken({
           id: user.id,
           email: user.email,
-          username: user.fullName,
+          username: user.username,
           is_active: user.isActive,
           roles: user.roles
         })
@@ -89,7 +89,7 @@ export class AuthService {
       where: {email},
       select:{
         email: true,
-        fullName:true,
+        username:true,
         password: true,
         id: true,
         roles:true,
@@ -109,7 +109,7 @@ export class AuthService {
 
     return {
       user:{
-        fullName: user.fullName,
+        username: user.username,
         id: user.id,
         roles:user.roles,
         is_active:user.isActive,
@@ -117,7 +117,7 @@ export class AuthService {
       token:this.getJwtToken({
         id: user.id,
         email: user.email,
-        username: user.fullName,
+        username: user.username,
         is_active: user.isActive,
         roles:user.roles
       })
@@ -147,7 +147,7 @@ export class AuthService {
       token:this.getJwtToken({
         id: user.id,
         email: user.email,
-        username: user.fullName,
+        username: user.username,
         is_active: user.isActive,
         roles:user.roles
       })

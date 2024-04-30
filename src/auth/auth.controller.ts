@@ -60,8 +60,8 @@ the '/auth/private' endpoint. Here's a breakdown of what it does: */
  * string that represents the email of the user obtained using the `@GetUser('email')` decorator. This
  * decorator is likely used to extract specific user information from the request context in a NestJS
  * application. In this case
- * @param {string} userFullName - The `userFullName` parameter in the `testingPrivateRoute` function is
- * decorated with `@GetUser('fullName') userFullName: string`. This means that it is retrieving the
+ * @param {string} userusername - The `userusername` parameter in the `testingPrivateRoute` function is
+ * decorated with `@GetUser('username') userusername: string`. This means that it is retrieving the
  * full name of the user from the request.
  * @param {string} userId - The `userId` parameter in the `testingPrivateRoute` function is obtained
  * using the `@GetUser('id') userId: string` decorator. This decorator is likely used to extract the
@@ -75,14 +75,14 @@ the '/auth/private' endpoint. Here's a breakdown of what it does: */
  * @returns The function `testingPrivateRoute` is returning an object with the following properties:
  * - `user`: User object obtained from the `@GetUser()` decorator
  * - `userEmail`: Email string obtained from the `@GetUser('email')` decorator
- * - `userFullName`: Full name string obtained from the `@GetUser('fullName')` decorator
+ * - `userusername`: Full name string obtained from the `@GetUser('username')` decorator
  * - `userId`: User ID string
  */
   testingPrivateRoute(
     //@Req() request: Express.Request
     @GetUser() user: User,
     @GetUser('email') userEmail: string,
-    @GetUser('fullName') userFullName: string,
+    @GetUser('username') userusername: string,
     @GetUser('id') userId: string,
 
     @RawHeaders() rawHeaders:string[],
@@ -92,7 +92,7 @@ the '/auth/private' endpoint. Here's a breakdown of what it does: */
     return{
       user,
       userEmail,
-      userFullName,
+      userusername,
       userId,
       rawHeaders,
       headers

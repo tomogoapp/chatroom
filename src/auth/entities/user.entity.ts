@@ -1,7 +1,7 @@
 import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 /* The above class defines a User entity with various properties such as id, email, backupEmail,
-password, fullName, isActive, roles, and includes before insert and update hooks to convert email to
+password, username, isActive, roles, and includes before insert and update hooks to convert email to
 lowercase. */
 @Entity('users')
 export class User {
@@ -25,7 +25,7 @@ export class User {
     password: string
 
     @Column('text')
-    fullName: string
+    username: string
 
     @Column('bool',{
         default: true
