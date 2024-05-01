@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ChatRoom } from "src/chat-room/entities/chat-room.entity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 /* The above class defines a User entity with various properties such as id, email, backupEmail,
 password, username, isActive, roles, and includes before insert and update hooks to convert email to
