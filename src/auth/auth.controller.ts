@@ -5,7 +5,10 @@ import {
   UseGuards, 
   Req,
   Headers,
-  SetMetadata
+  SetMetadata,
+  Patch,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common'
 import { AuthService } from './auth.service'
 import { CreateUserDto,LoginUserDto } from './dto';
@@ -17,17 +20,29 @@ import { UserRoleGuard } from './guards/user-role/user-role.guard';
 import { RoleProctected,Auth } from './decorators';
 import { validRoles } from './interface';
 import { ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { FilesService } from 'src/files/files.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private fileService: FilesService
+  ) {}
 
 /* The `createUser` method in the `AuthController` class is a handler for the POST request to the
 '/auth/register' endpoint. */
   @Post('register')
-  createUser(@Body() createUserDTO: CreateUserDto) {
-    return this.authService.create(createUserDTO);
+  @UseInterceptors(FileInterceptor('file'))
+  async createUser(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() createUserDTO: CreateUserDto
+  ) {
+
+    const uploadAvatar = await this.fileService.uploadFile(file)
+    createUserDTO.avatar = uploadAvatar === null ? null : uploadAvatar.Location
+    return await this.authService.create(createUserDTO);
   }
 
 /* The `loginUser` method in the `AuthController` class is a handler for the POST request to the
@@ -35,6 +50,11 @@ export class AuthController {
   @Post('login')
   loginUser(@Body() loginUserDto: LoginUserDto){
     return this.authService.login(loginUserDto)
+  }
+
+  @Patch('update-user')
+  updateUser(){
+    
   }
 
   @Get('check-status')

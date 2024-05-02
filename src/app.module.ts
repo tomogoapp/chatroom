@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
+import { ChatRoomModule } from './chat-room/chat-room.module';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { FilesModule } from './files/files.module';
       synchronize: true
     }),
     FilesModule,
-    AuthModule
+    AuthModule,
+    ChatRoomModule
   ],
   controllers: [],
   providers: [],

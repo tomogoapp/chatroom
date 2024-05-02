@@ -30,4 +30,11 @@ export class CreateUserDto {
     @MinLength(1)
     username: string
 
+    @IsString()
+    @MinLength(1)
+    display_name: string
+
+    @IsString()
+    @IsOptional()
+    avatar?: string
 }
