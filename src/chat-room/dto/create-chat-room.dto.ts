@@ -1,4 +1,4 @@
-import { IsEmail, IsString } from "class-validator";
+import { IsEmail, IsString, IsUUID } from "class-validator";
 
 export class CreateChatRoomDto {
 
@@ -8,5 +8,9 @@ export class CreateChatRoomDto {
 
     @IsString()
     image_portrait:string
+
+    @IsUUID()
+    @IsString()
+    userId:string
 
 }

@@ -10,11 +10,11 @@ import { User } from 'src/auth/entities/user.entity';
 export class ChatRoomService {
 
   constructor(
-    @InjectRepository(ChatRoom)
-    private chatRoomRepository: Repository<ChatRoom>,
+    // @InjectRepository(ChatRoom)
+    // private chatRoomRepository: Repository<ChatRoom>,
 
-    @InjectRepository(User)
-    private userRepository: Repository<User>
+    // @InjectRepository(User)
+    // private userRepository: Repository<User>
 
   ){}
 

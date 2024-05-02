@@ -25,13 +25,16 @@ export class User {
     })
     password: string
 
-    @Column('text')
+    @Column('text',{
+        unique: true, 
+        nullable: false
+    })
     username: string
 
-    @Column('bool',{
-        default: true
+    @Column('text',{
+        nullable: true
     })
-    isActive: boolean
+    displayName: string
 
     @Column('text',{
         array: true,
@@ -39,11 +42,25 @@ export class User {
     })
     roles: string[]
 
-
     @Column('text',{
         nullable: true
     })
     avatar: string
+
+    @Column('bool',{
+        default: true
+    })
+    isActive: boolean
+
+    @Column('bool',{
+        default: false
+    })
+    isDeleted: boolean
+
+    @Column('text',{
+        default: null
+    })
+    deleteAt: string
 
     // @OneToMany(
     //     () => Product,

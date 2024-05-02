@@ -1,9 +1,11 @@
 
 import { slug } from "slug-gen"
+import { User } from "src/auth/entities/user.entity";
 import { 
     BeforeInsert, 
     Column, 
     Entity, 
+    ManyToOne, 
     PrimaryGeneratedColumn 
 } from "typeorm";
 
@@ -33,6 +35,15 @@ export class ChatRoom {
 
     @Column()
     is_delete: boolean
+
+    @ManyToOne(
+        () => User,
+        ( user ) => user.id,
+        {
+            eager:true
+        }
+    )
+    userId:User
 
     @BeforeInsert()
     lowerCaseBeforeInsert(){
