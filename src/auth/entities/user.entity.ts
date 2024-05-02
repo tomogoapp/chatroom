@@ -1,4 +1,5 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { ChatRoom } from "src/chat-room/entities/chat-room.entity";
+import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 /* The above class defines a User entity with various properties such as id, email, backupEmail,
 password, username, isActive, roles, and includes before insert and update hooks to convert email to
@@ -24,13 +25,16 @@ export class User {
     })
     password: string
 
-    @Column('text')
+    @Column('text',{
+        unique: true, 
+        nullable: false
+    })
     username: string
 
-    @Column('bool',{
-        default: true
+    @Column('text',{
+        nullable: true
     })
-    isActive: boolean
+    displayName: string
 
     @Column('text',{
         array: true,
@@ -38,11 +42,25 @@ export class User {
     })
     roles: string[]
 
-
     @Column('text',{
         nullable: true
     })
     avatar: string
+
+    @Column('bool',{
+        default: true
+    })
+    isActive: boolean
+
+    @Column('bool',{
+        default: false
+    })
+    isDeleted: boolean
+
+    @Column('text',{
+        default: null
+    })
+    deleteAt: string
 
     // @OneToMany(
     //     () => Product,
