@@ -78,9 +78,9 @@ export class ChatRoomController {
     return await this.chatRoomService.findOne(term);
   }
 
-  /* The code snippet you provided is defining a PATCH endpoint in the `ChatRoomController` class for
-  updating a chat room based on a specific term. Here's a breakdown of what each part of the code is
-  doing: */
+/* The `@Patch(':term')` decorator in the `ChatRoomController` class is defining a PATCH endpoint for
+updating a chat room based on a specific term. Here's a breakdown of what each part of the code is
+doing: */
   @Patch(':term')
   @Auth(
     validRoles.admin,
