@@ -69,8 +69,6 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
  * operation, which includes information such as the location of the uploaded file in the S3 bucket.
  */
   async uploadFile(file: Express.Multer.File) {
-
-    console.log('file -->',file)
   
     if(file === undefined){
       return null

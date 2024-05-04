@@ -1,16 +1,17 @@
-import { IsEmail, IsString, IsUUID } from "class-validator";
+
+import { IsOptional, IsString, IsUUID } from "class-validator";
 
 export class CreateChatRoomDto {
 
     @IsString()
-    @IsEmail()
-    chatroom_name: string
+    chatroomName: string
 
     @IsString()
-    image_portrait:string
+    @IsOptional()
+    imagePortrait?:string
 
     @IsUUID()
     @IsString()
-    userId:string
+    createdBy:string
 
 }
