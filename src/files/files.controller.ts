@@ -59,10 +59,11 @@ single file. Here's a breakdown of what the code is doing: */
  * data returned from the `uploadFile` method of the `filesService`.
  */
   async uploadFile(
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile() file: Express.Multer.File,
+    imageSrc
   ) {
       try {
-          const uploadResult = await this.filesService.uploadFile(file)
+          const uploadResult = await this.filesService.uploadFile(file,imageSrc)
           return {
             message: 'File uploaded successfully',
             data: uploadResult
@@ -85,8 +86,9 @@ multiple files. Here's a breakdown of what the code is doing: */
  * @returns The `uploadMultipleFiles` function is returning the result of calling the `uploadFiles`
  * method from the `filesService` with the `files` array as an argument.
  */
-  async uploadMultipleFiles(@UploadedFiles() files: Express.Multer.File[]) {
-    return await this.filesService.uploadFiles(files);
+  async uploadMultipleFiles(@UploadedFiles() files: Express.Multer.File[],imageSrc) {
+    //return await this.filesService.uploadFiles(files,imageSrc);
+    return 'Manteinement'
   }
 
 /* The `@Delete('product/:filekey')` decorator in the NestJS controller is defining a DELETE endpoint
