@@ -48,16 +48,28 @@ export class FilesService {
  * @returns An array of promises is being returned. Each promise represents the upload of a file to AWS
  * S3.
  */
-async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.SendData[]> {
+// async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.SendData[]> {
+//   if (!files || files.length === 0) {
+//     // Puedes decidir lanzar un error o simplemente retornar un array vacío
+//     throw new BadRequestException('No files provided');
+//     // O retornar un array vacío si eso se ajusta mejor a tu flujo de trabajo
+//     // return [];
+//   }
+//   const uploadPromises = files.map(file => this.uploadFile(file));
+//   return await Promise.all(uploadPromises);
+// }
+
+async createFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.SendData[]> {
   if (!files || files.length === 0) {
     // Puedes decidir lanzar un error o simplemente retornar un array vacío
     throw new BadRequestException('No files provided');
     // O retornar un array vacío si eso se ajusta mejor a tu flujo de trabajo
     // return [];
   }
-  const uploadPromises = files.map(file => this.uploadFile(file));
+  const uploadPromises = files.map(file => this.createFile(file));
   return await Promise.all(uploadPromises);
 }
+
 
 /**
  * The function `uploadFile` asynchronously uploads a file to an S3 bucket using the AWS SDK.
@@ -68,7 +80,29 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
  * using the `s3.upload` method. The `uploadResult` variable contains the result of the upload
  * operation, which includes information such as the location of the uploaded file in the S3 bucket.
  */
-  async uploadFile(file: Express.Multer.File) {
+  async uploadFile(file: Express.Multer.File,imageString) {
+  
+    if(file === undefined){
+      return null
+    }
+
+    const data = await this.deleteFile(imageString)
+
+    console.log('data =>',data)
+
+    const name = fileNameUUID(file)
+    const uploadResult = await this.s3.upload({
+      Bucket: process.env.MINIO_BUCKET, // Nombre de tu bucket
+      Body: file.buffer,
+      //Key: `${Date.now()}-${file.originalname}`
+      Key: name
+
+    }).promise()
+
+    return uploadResult
+  }
+
+  async createFile(file: Express.Multer.File) {
   
     if(file === undefined){
       return null
@@ -85,6 +119,7 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
 
     return uploadResult
   }
+
 
 /**
  * The function `deleteMultipleFiles` deletes multiple files specified in an array of image filenames.
@@ -121,13 +156,18 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
 
     try{
 
+      const encodedKey = this.removeUpToLastSlash(key);
+
       const deleteParams = {
         Bucket: process.env.MINIO_BUCKET,
-        Key: key
+        Key: encodedKey
       }
+
+      console.log('deleteParams =>',deleteParams)
 
       const data = await this.s3.deleteObject(deleteParams).promise()
 
+      console.log('data =>',data)
       return {
         message: 'Archivo Borrado',
         data:data
@@ -138,5 +178,10 @@ async uploadFiles(files: Express.Multer.File[] ): Promise<AWS.S3.ManagedUpload.S
     }
 
   } 
+
+  private removeUpToLastSlash(url) {
+    const lastSlashIndex = url.lastIndexOf('/');
+    return url.substring(lastSlashIndex + 1);
+  }
 
 }

@@ -1,13 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateChatRoomDto } from './dto/create-chat-room.dto';
-import { UpdateChatRoomDto } from './dto/update-chat-room.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ChatRoom } from './entities/chat-room.entity';
-import { Repository } from 'typeorm';
-import { User } from 'src/auth/entities/user.entity';
-import { ErrorRequestProvider } from 'src/providers/error-request.provider';
-import { PaginationDTO } from 'src/common/dto/pagination.dto';
-import { isUUID } from 'class-validator';
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { CreateChatRoomDto } from './dto/create-chat-room.dto'
+import { UpdateChatRoomDto } from './dto/update-chat-room.dto'
+import { InjectRepository } from '@nestjs/typeorm'
+import { ChatRoom } from './entities/chat-room.entity'
+import { Repository } from 'typeorm'
+import { User } from 'src/auth/entities/user.entity'
+import { ErrorRequestProvider } from 'src/providers/error-request.provider'
+import { PaginationDTO } from 'src/common/dto/pagination.dto'
+import { isUUID } from 'class-validator'
+// import { FilesService } from 'src/files/files.service'
 
 @Injectable()
 export class ChatRoomService {
@@ -22,6 +23,7 @@ export class ChatRoomService {
 
     private readonly errorRequestProvider: ErrorRequestProvider,
 
+    // private fileService: FilesService
   ){}
 
   async create(createChatRoomDto: CreateChatRoomDto,user) {
@@ -73,8 +75,21 @@ export class ChatRoomService {
     return chatroom;
   }
 
-  update(id: number, updateChatRoomDto: UpdateChatRoomDto) {
-    return `This action updates a #${id} chatRoom`;
+  async update(term: string, updateChatRoomDto: UpdateChatRoomDto,user) {
+    let chatroom: ChatRoom
+    const { ...toUpdate } = updateChatRoomDto
+    const searchCondition = isUUID(term) ? { id:term } : { slug: term }
+    chatroom = await this.chatRoomRepository.preload(searchCondition)
+
+    if(!chatroom){
+      throw new BadRequestException('Chatroom no encontrado')
+    }
+
+    console.log('updateChatRoomDto => ',updateChatRoomDto)
+    
+    Object.assign(chatroom, toUpdate);
+    return this.chatRoomRepository.save(chatroom);
+
   }
 
   async disable(term: string){

@@ -23,7 +23,9 @@ export class ChatRoom {
     @Column()
     slug: string
 
-    @Column()
+    @Column({
+        nullable: true
+    })
     imagePortrait: string
 
 
