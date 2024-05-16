@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User } from './entities/user.entity';
@@ -12,6 +12,7 @@ import {
 } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { FilesModule } from 'src/files/files.module';
+import { ChatMembersModule } from 'src/chat-members/chat-members.module';
 
 @Module({
   controllers: [AuthController],
@@ -46,7 +47,8 @@ import { FilesModule } from 'src/files/files.module';
       }
 
     }),
-    FilesModule
+    FilesModule,
+    ChatMembersModule
   ],
   exports:[
     TypeOrmModule,

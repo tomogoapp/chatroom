@@ -51,6 +51,8 @@ export class ChatRoomController {
     @GetUser() user: User
   ) {
 
+
+    console.log('user => ',user)
     const uploadImage = await this.fileService.createFile(file)
     createChatRoomDto.imagePortrait = uploadImage === null ? null : uploadImage.Location
 
@@ -110,7 +112,7 @@ doing: */
     console.log('file => ',file)
     console.log('createChatRoomDto.imagePortrait => ',updateChatRoomDto.imagePortrait)
 
-    return this.chatRoomService.update(term, updateChatRoomDto, user);
+    return this.chatRoomService.update(term, updateChatRoomDto);
   }
 
   /* The `@Patch(':term/disable')` decorator in the `ChatRoomController` class is defining a PATCH
