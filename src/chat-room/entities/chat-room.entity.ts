@@ -1,40 +1,45 @@
 
-import { slug } from "slug-gen"
-import { User } from "src/auth/entities/user.entity";
 import { 
     BeforeInsert, 
     Column, 
+    CreateDateColumn, 
     Entity, 
     ManyToOne, 
-    PrimaryGeneratedColumn 
-} from "typeorm";
+    OneToMany, 
+    PrimaryGeneratedColumn, 
+    UpdateDateColumn
+} from "typeorm"
+import { slug } from "slug-gen"
+import { User } from "src/auth/entities/user.entity"
+import { ChatMember } from "src/chat-members/entities/chat-member.entity"
 
 @Entity()
 export class ChatRoom {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn('uuid')
     id:string
 
     @Column()
-    chatroom_name: string
+    chatroomName: string
 
     @Column()
     slug: string
 
-    @Column()
-    image_portrait: string
+    @Column({
+        nullable: true
+    })
+    imagePortrait: string
 
-    @Column()
-    created_at: string
 
-    @Column()
-    created_by: string
+    @Column('bool',{
+        default: true
+    })
+    isActive: boolean
 
-    @Column()
-    delete_at: string
-
-    @Column()
-    is_delete: boolean
+    @Column('bool',{
+        default: false
+    })
+    isDeleted: boolean
 
     @ManyToOne(
         () => User,
@@ -43,15 +48,26 @@ export class ChatRoom {
             eager:true
         }
     )
-    userId:User
+    createdBy: User
 
-    @BeforeInsert()
-    lowerCaseBeforeInsert(){
-        this.chatroom_name = this.chatroom_name.toLocaleLowerCase().trim()
-    }
+    // @OneToMany(
+    //     () => ChatMember,
+    //     (chatMember) => chatMember.room,
+    //     {
+    //         eager:true
+    //     }
+    // )
+    // members: ChatMember[]
+
+
+    @UpdateDateColumn()
+    updateAt: Date
+
+    @CreateDateColumn()
+    createAt: Date
 
     @BeforeInsert()
     slugBeforeInsert(){
-        this.slug = slug(this.slug)
+        this.slug = slug(this.chatroomName)
     }
 }

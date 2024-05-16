@@ -1,5 +1,14 @@
-import { ChatRoom } from "src/chat-room/entities/chat-room.entity";
-import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { 
+    BeforeInsert, 
+    BeforeUpdate, 
+    Column, 
+    CreateDateColumn, 
+    Entity,
+    OneToMany, 
+    PrimaryGeneratedColumn, 
+    UpdateDateColumn 
+} from "typeorm"
+import { ChatMember } from "src/chat-members/entities/chat-member.entity"
 
 /* The above class defines a User entity with various properties such as id, email, backupEmail,
 password, username, isActive, roles, and includes before insert and update hooks to convert email to
@@ -57,10 +66,11 @@ export class User {
     })
     isDeleted: boolean
 
-    @Column('text',{
-        default: null
-    })
-    deleteAt: string
+    @UpdateDateColumn()
+    updateAt: Date
+
+    @CreateDateColumn()
+    createAt: Date
 
     // @OneToMany(
     //     () => Product,
@@ -68,9 +78,26 @@ export class User {
     // )
     // product: Product
 
+    // @OneToMany(
+    //     () => ChatMember,
+    //     (chatmember) => chatmember,
+    //     {
+    //         eager:true
+    //     }
+    // )
+    // member: ChatMember
+
     @BeforeInsert()
     lowerCaseBeforeInsert(){
         this.email = this.email.toLocaleLowerCase().trim()
+    }
+
+    @BeforeInsert()
+    toCreateDisplayName(){
+        if(this.displayName === undefined ){
+            this.displayName = this.username.toLocaleLowerCase().trim()
+        }
+        console.log('this.displayName => ',this.displayName)
     }
 
     @BeforeUpdate()

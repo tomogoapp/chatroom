@@ -1,4 +1,4 @@
-version: '3'
+version: '4'
 
 services:
   db:
@@ -30,7 +30,19 @@ services:
     restart: unless-stopped
     networks:
       - ${NETWORK}
-      
+
+  nodb:
+    image: mongo:5
+    restart: always
+    ports:
+      - ${MONGODB_PORTS}
+    environment:
+      MONGODB_DATABASE : ${MONGODB_NAME}
+    volumes:
+      - ./mongo:/data/db
+    networks:
+      - ${NETWORK}
+
 networks:
   windows96:
     external: true

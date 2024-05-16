@@ -40,7 +40,7 @@ export class AuthController {
     @Body() createUserDTO: CreateUserDto
   ) {
 
-    const uploadAvatar = await this.fileService.uploadFile(file)
+    const uploadAvatar = await this.fileService.createFile(file)
     createUserDTO.avatar = uploadAvatar === null ? null : uploadAvatar.Location
     return await this.authService.create(createUserDTO);
   }

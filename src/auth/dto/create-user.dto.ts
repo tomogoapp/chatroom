@@ -32,7 +32,8 @@ export class CreateUserDto {
 
     @IsString()
     @MinLength(1)
-    display_name: string
+    @IsOptional()
+    displayName?: string
 
     @IsString()
     @IsOptional()
