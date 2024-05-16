@@ -1,15 +1,17 @@
 
-import { slug } from "slug-gen"
-import { User } from "src/auth/entities/user.entity";
 import { 
     BeforeInsert, 
     Column, 
     CreateDateColumn, 
     Entity, 
     ManyToOne, 
+    OneToMany, 
     PrimaryGeneratedColumn, 
     UpdateDateColumn
-} from "typeorm";
+} from "typeorm"
+import { slug } from "slug-gen"
+import { User } from "src/auth/entities/user.entity"
+import { ChatMember } from "src/chat-members/entities/chat-member.entity"
 
 @Entity()
 export class ChatRoom {
@@ -48,8 +50,15 @@ export class ChatRoom {
     )
     createdBy: User
 
-    // @Column()
-    // createdBy: string
+    // @OneToMany(
+    //     () => ChatMember,
+    //     (chatMember) => chatMember.room,
+    //     {
+    //         eager:true
+    //     }
+    // )
+    // members: ChatMember[]
+
 
     @UpdateDateColumn()
     updateAt: Date
