@@ -5,6 +5,8 @@ import { AuthModule } from './auth/auth.module';
 import { FilesModule } from './files/files.module';
 import { ChatRoomModule } from './chat-room/chat-room.module';
 import { ChatMembersModule } from './chat-members/chat-members.module';
+import { ChatMessagesModule } from './chat-messages/chat-messages.module';
+import { MongooseModule } from '@nestjs/mongoose';
 
 @Module({
   imports: [
@@ -19,10 +21,14 @@ import { ChatMembersModule } from './chat-members/chat-members.module';
       autoLoadEntities:true,
       synchronize: true
     }),
+    MongooseModule.forRoot(process.env.MONGODB_URL,{
+      dbName:process.env.MONGODB_DB
+    }),   
     FilesModule,
     AuthModule,
     ChatRoomModule,
-    ChatMembersModule
+    ChatMembersModule,
+    ChatMessagesModule
   ],
   controllers: [],
   providers: [],
