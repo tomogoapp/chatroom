@@ -44,6 +44,23 @@ export class ChatRoomController {
     validRoles.superUser
   )
   @UseInterceptors(FileInterceptor('file'))
+/**
+ * This TypeScript function creates a chat room with an uploaded file, chat room details, and user
+ * information.
+ * @param file - The `file` parameter in the `create` method is of type `Express.Multer.File`, which is
+ * a type provided by the Multer middleware for handling file uploads in Express.js. This parameter
+ * represents the file that was uploaded by the user.
+ * @param {CreateChatRoomDto} createChatRoomDto - The `createChatRoomDto` parameter is an object that
+ * contains data for creating a chat room. It likely includes properties such as the chat room name,
+ * description, and any other relevant information needed to create a new chat room. In the provided
+ * code snippet, the `createChatRoomDto` object
+ * @param {User} user - The `user` parameter in the `create` method is being obtained using a custom
+ * decorator `@GetUser()`. This decorator is likely used to extract the user information from the
+ * request context or token. In this case, it seems to be extracting the `User` object representing the
+ * current user making
+ * @returns The `create` method is returning the result of calling the `create` method of the
+ * `chatRoomService` with the `createChatRoomDto` and `user` parameters.
+ */
   async create(
     @UploadedFile() file: Express.Multer.File,
     @Body()
@@ -63,10 +80,25 @@ export class ChatRoomController {
   }
 
   @Get()
+/**
+ * The `findAll` function in TypeScript takes a `paginationDto` object as a query parameter and passes
+ * it to the `chatRoomService` to retrieve all chat rooms.
+ * @param {PaginationDTO} paginationDto - The `paginationDto` parameter in the `findAll` method is an
+ * object of type `PaginationDTO` that is passed as a query parameter. It is used to handle pagination
+ * for retrieving a list of chat rooms. The `paginationDto` object likely contains properties such as
+ * `page`, `limit`,
+ * @returns The `findAll` method is returning the result of calling the `findAll` method of the
+ * `chatRoomService` with the `paginationDto` parameter.
+ */
   findAll(
     @Query() paginationDto: PaginationDTO
   ) {
-    return this.chatRoomService.findAll(paginationDto);
+    return this.chatRoomService.findAll(paginationDto)
+  }
+
+  @Get('/show-main')
+  showMain(){
+    return this.chatRoomService.showMain()
   }
 
   /* The `@Get(':term')` decorator in the `ChatRoomController` class is defining a GET endpoint for

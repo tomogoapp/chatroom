@@ -44,7 +44,7 @@ export class ChatRoomService {
 
     try{
 
-      const { createdBy, ...chatRoom } = createChatRoomDto
+      const { ...chatRoom } = createChatRoomDto
 
       const chatroom = this.chatRoomRepository.create({
         ...chatRoom,
@@ -87,6 +87,12 @@ export class ChatRoomService {
     return chatrooms
 
   }
+
+  async showMain(){
+    const chatrooms = await this.chatRoomRepository.find({take:9})
+    return chatrooms
+  }
+
 
  /**
   * This TypeScript function searches for a chatroom by either its ID or slug and returns it if found,
