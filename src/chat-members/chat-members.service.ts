@@ -53,7 +53,7 @@ export class ChatMembersService {
     await this.chatRoomMemberRepository.save(membership)
     return membership
 
-  }
+  }//🟩
 
 /**
  * This TypeScript function unsubscribes a user from a chat room by updating the ChatRoomMember entity.
@@ -75,21 +75,6 @@ export class ChatMembersService {
 
     this.chatRoomMemberRepository.save(ChatRoomMember)
     
-  }
-
-  private async validateData(roomId, user) {
-
-    const room = await this.chatRoomRepository.findOne({ where: { id: roomId } })
-    if (!room) throw new NotFoundException('Room not found')
-  
-    const alreadyMember = await this.chatRoomMemberRepository
-      .createQueryBuilder('room')
-      .where('room.roomId = :roomId AND room.memberId = :userId',{roomId,user})
-      .getOne()
-
-    if(alreadyMember) throw new BadRequestException('User has been removed')
-   
-
   }
 
 }
