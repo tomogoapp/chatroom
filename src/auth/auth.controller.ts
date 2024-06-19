@@ -34,7 +34,7 @@ export class AuthController {
 /* The `createUser` method in the `AuthController` class is a handler for the POST request to the
 '/auth/register' endpoint. */
   @Post('register')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('avatar'))
   async createUser(
     @UploadedFile() file: Express.Multer.File,
     @Body() createUserDTO: CreateUserDto

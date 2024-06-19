@@ -5,6 +5,7 @@ import { Repository } from 'typeorm'
 import { InjectRepository } from '@nestjs/typeorm'
 import { ChatMember } from './entities/chat-member.entity'
 import { ChatRoom } from 'src/chat-room/entities/chat-room.entity'
+import { CheckAuthProvider } from 'src/providers/check-auth.provider'
 
 @Injectable()
 export class ChatMembersService {
@@ -15,7 +16,9 @@ export class ChatMembersService {
     private readonly chatRoomMemberRepository: Repository<ChatMember>,
 
     @InjectRepository(ChatRoom)
-    private readonly chatRoomRepository: Repository<ChatRoom>
+    private readonly chatRoomRepository: Repository<ChatRoom>,
+
+    private readonly checkAuthProvider : CheckAuthProvider
   ){}
 
  /**
@@ -38,26 +41,10 @@ export class ChatMembersService {
 
     const room = await this.chatRoomRepository.findOne({ where: { id: roomId } })
     if (!room) throw new NotFoundException('Room not found')
+
+    const bool = await this.checkAuthProvider.handleCheckAuth(userId,roomId)
+    if(bool.valueOf()) throw new BadRequestException('User is a member already!')
   
-    const alreadyMember = await this.chatRoomMemberRepository
-      .createQueryBuilder('room')
-      .where('room.roomId = :roomId AND room.memberId = :userId',{roomId,userId})
-      .getOne()
-
-    if(alreadyMember && !alreadyMember.isDeleted){
-      throw new BadRequestException(`User is a member already! ${alreadyMember.isDeleted}`)
-    }else if(alreadyMember && alreadyMember.isDeleted){
-
-      let ChatRoomMember: ChatMember
-  
-      ChatRoomMember = await this.chatRoomMemberRepository.findOneBy({roomId:roomId , memberId: userId})
-      ChatRoomMember.isDeleted = false
-  
-      this.chatRoomMemberRepository.save(ChatRoomMember)
-
-      return ChatRoomMember
-
-    }
     const membership = this.chatRoomMemberRepository.create({
       roomId: room.id,
       memberId: user.id,

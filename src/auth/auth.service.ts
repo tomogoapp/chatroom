@@ -1,4 +1,5 @@
-import { 
+import {
+  BadRequestException,
   Injectable, 
   UnauthorizedException 
 } from '@nestjs/common'
@@ -43,7 +44,11 @@ export class AuthService {
     
     try{
 
-      const { password, ...userData } = createUserDto
+      const { password,confirmPassword, ...userData } = createUserDto
+
+      if(password !== confirmPassword){
+        throw new BadRequestException('password dont match')
+      }
 
       const user = this.userRepository.create({
         ...userData,
@@ -54,14 +59,14 @@ export class AuthService {
 
       return {
         "message":"User create successfully",
-        ...user,
-        token:this.getJwtToken({
-          id: user.id,
-          email: user.email,
-          username: user.username,
-          is_active: user.isActive,
-          roles: user.roles
-        })
+        // ...user,
+        // token:this.getJwtToken({
+        //   id: user.id,
+        //   email: user.email,
+        //   username: user.username,
+        //   is_active: user.isActive,
+        //   roles: user.roles
+        // })
       }
       
     }catch(error){
@@ -105,8 +110,6 @@ export class AuthService {
       throw new UnauthorizedException('Password doesnt match')
     }
 
-
-
     return {
       user:{
         username: user.username,
@@ -141,16 +144,25 @@ export class AuthService {
 
   }
 
+/**
+ * The function `checkAuthStatus` in TypeScript extracts specific properties from a User object and
+ * returns a modified user object with selected properties.
+ * @param {User} user - The `checkAuthStatus` function takes a `user` object as a parameter, which
+ * likely contains properties such as `username`, `id`, `roles`, and `isActive`. The function then
+ * returns a modified version of the `user` object with only the `username`, `id`, `roles
+ * @returns The `checkAuthStatus` function is returning an object with the `username`, `id`, `roles`,
+ * and `is_active` properties of the `user` object. The `is_active` property is derived from the
+ * `isActive` property of the `user` object.
+ */
   async checkAuthStatus(user:User){
     return{
-      ...user,
-      token:this.getJwtToken({
-        id: user.id,
-        email: user.email,
+      ///...user,
+      user:{
         username: user.username,
-        is_active: user.isActive,
-        roles:user.roles
-      })
+        id: user.id,
+        roles:user.roles,
+        is_active:user.isActive,
+      }
     }
   }
 

@@ -1,15 +1,33 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { ChatMessagesService } from './chat-messages.service';
-import { CreateChatMessageDto } from './dto/create-chat-message.dto';
-import { UpdateChatMessageDto } from './dto/update-chat-message.dto';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete
+} from '@nestjs/common'
+import { ChatMessagesService } from './chat-messages.service'
+import { CreateChatMessageDto } from './dto/create-chat-message.dto'
+import { UpdateChatMessageDto } from './dto/update-chat-message.dto'
+import { Auth, GetUser } from 'src/auth/decorators'
+//import { validRoles } from 'src/auth/interface'
+import { User } from 'src/auth/entities/user.entity'
 
 @Controller('chat-messages')
 export class ChatMessagesController {
-  constructor(private readonly chatMessagesService: ChatMessagesService) {}
+  constructor(
+    private readonly chatMessagesService: ChatMessagesService
+  ) { }
 
   @Post()
-  create(@Body() createChatMessageDto: CreateChatMessageDto) {
-    return this.chatMessagesService.create(createChatMessageDto);
+  @Auth()
+  async create(
+    @Body()
+    createChatMessageDto:CreateChatMessageDto,
+    @GetUser() user: User
+  ){
+    return await this.chatMessagesService.create(createChatMessageDto,user)
   }
 
   @Get()
